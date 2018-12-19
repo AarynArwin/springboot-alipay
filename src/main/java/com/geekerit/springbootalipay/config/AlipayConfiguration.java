@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @ClassName AlipayConfiguration
- * @Description TODO
+ * @Description 支付宝支付配置类
  * @Author Aaryn
  * @Date 2018/12/19 17:40
  * @Version 1.0

@@ -29,7 +29,7 @@ import java.util.Map;
 @Controller
 public class WapPayController {
 
-    public static final Logger logger = LoggerFactory.getLogger(WapPayController.class);
+//    public static final Logger logger = LoggerFactory.getLogger(WapPayController.class);
 
     @Autowired
     private AlipayProperties alipayProperties;
@@ -92,11 +92,11 @@ public class WapPayController {
 
         if (verifyResult){
             String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
-            logger.info("商品订单号{}", outTradeNo);
+//            logger.info("商品订单号{}", outTradeNo);
 
             //支付宝交易号
             String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
-            logger.info("交易号{}",tradeNo);
+//            logger.info("交易号{}",tradeNo);
             return "wayPaySuccess";
         }
 
