@@ -1,0 +1,40 @@
+server:
+  port: 9988
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/upload?characterEncoding=utf-8
+    username: root
+    password: superman713
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: fordearme2018
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+    timeout: 2000ms
+  mvc:
+    view:
+      prefix: /templates
+      suffix: .html
+
+
+logging:
+  config: logback.xml
+
+pay:
+  alipay:
+    gatewayUrl: https://openapi.alipaydev.com/gateway.do
+    appid: 2016091900546447
+    privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCMcBUb2vB6DmLsWFsevo4N9WyBmM2AmAfKXVkx28hTt9vRzi2jCcF6Fm0wlX1im1jcnhc2JBR2Ahajhrl1vS3y8jUb7UBa9QSLnXcM3Z4jQ5IERJve4DOCYsS5sa9L0w8DlXb6DjkVojPefV+tY89XvRVvUj33Jnezko66dFhGlr8+X5jDXngcCY96IweWlOp11Wr82OKS2KepTmjAhcpsOZrWrp7O7xMQ1iUKO421QYx17n6CgV5WEniUVu/gFXStoeQoMqqorIPYqxueYYqPJwGLMYVyNfHlJUJfyE1fZBMN9CB07cIv9XPk20OMmZVTEpl77I0hXCQ/qagC5bmhAgMBAAECggEAVehyYTnLBT8rsFxUUThL+an6GET64QEfMuFroJ5Lqzq7U1qGfEeJfT+ex6uKqflRoJNsq4fipFWet6XAaY+yPf2AE3dMeNeNUkKfAtXG2NeKyOWXW/1WRRpaMSXKj92qP4z83PY6YUt5405aaty1h3x5UkHC+h8j9kte2Bw3q+W3xer8o+0RwiG5JdzhrUD0Y14XytJKDulhPq8zi+PBEOl/L0dfgWfR9OOQkctOh0nZsgrU1ukdmQfxBzUO9yfU0L8afPB+gyjJDztY19aj/q6z4V53dX8Pzt4KFWp/NxhNF2KycnTkGj1rx3q6RZBPoDywZ9iOFc3QHRj++KgZCQKBgQD0pWc3kUP7+gmpztgMAEqm9P0D4eF6jjlvudJgQrqgNiXaOJuk9R5Ja02wktIUXIBl5xLKhKyI9WV8sGuo8/ThlKBt/RZtaBDOFKfkazjUX4jWcFwe9gvlhlHbpIx48NSQJC5pKOspcuE1YJbqmxysRpchoZ6jyXv2dTYaVquyGwKBgQCS9JllbhD/c7nqS4IbQkoZlgEVqDqXH6MCtFaCfQGaSaBZw/nF9Mr0jbR0leKRr1dcJZ6gEeu97by+SYOPfMG4/IAyHCynYkCSqEiWsh8YkT/s9ZpnkiCj7W5Cc6JhCIi3Q7wGEA2j5LlgZKEbUfIQ+yMMcWhmSEHQ0q6H2e2e8wKBgARbOaZMqOhAwJFMhJ5aFvo4HJVIHWrAQ5eQuIVMSuR1cmEbZvIeB0cJaR2+z4zbRNILtlLy39ukewUoYxJkHbUyn1S2EAMsujfhOEgh/KYTeW1QHOPUP8v7g1Ok73dr2m0ip8zplJ5tVENOEAHndzA+JYzMwvVprhJqbec0KeSHAoGAB1pDnoaORSm2IJncjZ6YdIVD0qCTJeKIVmdNeMPmY6DRbAxZH+VqjifU4oxpRJ7AQTUEpb+fyuXtLpwg//ne+3FuvJMaTNmmn2/aCegplCIYT7POIOZ3yZvki2CbvD0gEgNKkgcVl6CnAcKnKOXFtcHK9CFsdsmguWEBKHzn3a8CgYBMYbPwiUn5fXdiz4KCiqkqlZnlPrpR2emx7LKxJ9Vl21LYgYjVC3BCRVI8ZULLaDuaVkpgXsR+PIueTHRrHU19LTG0heJaTVQMMIBNB3ntKew/iNtNW/HV4Fx54iPrpJXJ3sw2rjY5WhcqbvouDaG29uxPtek4fsd3yDNuwYyKjw==
+    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjHAVG9rweg5i7FhbHr6ODfVsgZjNgJgHyl1ZMdvIU7fb0c4townBehZtMJV9YptY3J4XNiQUdgIWo4a5db0t8vI1G+1AWvUEi513DN2eI0OSBESb3uAzgmLEubGvS9MPA5V2+g45FaIz3n1frWPPV70Vb1I99yZ3s5KOunRYRpa/Pl+Yw154HAmPeiMHlpTqddVq/NjiktinqU5owIXKbDma1q6ezu8TENYlCjuNtUGMde5+goFeVhJ4lFbv4BV0raHkKDKqqKyD2KsbnmGKjycBizGFcjXx5SVCX8hNX2QTDfQgdO3CL/Vz5NtDjJmVUxKZe+yNIVwkP6moAuW5oQIDAQAB
+    returnUrl: http://www.geekerit.com/pay/alipay/returnUrl
+    notifyUrl: http://www.geekerit.com/pay/alipay/notifyUrl
+    charset: UTF-8
+    format: json
+    signType: RSA2
