@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,6 +71,7 @@ public class WapPayController {
     }
 
     @RequestMapping(value = "/returnUrl")
+    @ResponseBody
     public String returnUrl(HttpServletRequest request, HttpServletResponse response) throws Exception{
         Map<String,String> map = new HashMap<>(16);
 
@@ -85,13 +87,15 @@ public class WapPayController {
                 valueStr = (i == values.length - 1) ? valueStr + values[i]: valueStr + values[i] + ",";
             }
             valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+
+            logger.info("该{}项下的获取的值为,{}",name,valueStr);
             map.put(name,valueStr);
         }
         boolean verifyResult = AlipaySignature.rsaCheckV1(map,
                 alipayProperties.getPublicKey(),
                 alipayProperties.getCharset(),
                 alipayProperties.getSignType());
-
+        logger.info("验签结果{}",verifyResult);
         if (verifyResult){
             String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
             logger.info("商品订单号{}", outTradeNo);
