@@ -1,7 +1,7 @@
 server:
   port: 9988
 
-#spring:
+spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://127.0.0.1:3306/upload?characterEncoding=utf-8
@@ -18,10 +18,10 @@ server:
 #        min-idle: 0
 #        max-wait: -1ms
 #    timeout: 2000ms
-#  mvc:
-#    view:
-#      prefix: /templates
-#      suffix: .html
+  mvc:
+    view:
+      prefix: /templates
+      suffix: .html
 
 
 logging:
