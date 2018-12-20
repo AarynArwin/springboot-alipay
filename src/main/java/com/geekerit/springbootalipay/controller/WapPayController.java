@@ -88,7 +88,6 @@ public class WapPayController {
             }
             valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
 
-            logger.info("该{}项下的获取的值为,{}", name, valueStr);
             map.put(name, valueStr);
         }
         boolean verifyResult = AlipaySignature.rsaCheckV1(map,
