@@ -47,7 +47,7 @@ public class PayNotifyController {
             for (int i = 0; i < values.length; i++) {
                 valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
             }
-            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
 
             logger.info("该{}项下的获取的值为,{}", name, valueStr);
             map.put(name, valueStr);
