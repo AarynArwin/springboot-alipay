@@ -1,6 +1,5 @@
 package com.geekerit.springbootalipay.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeQueryModel;
@@ -17,6 +16,7 @@ import com.geekerit.springbootalipay.constants.AlipayConstants;
 import com.geekerit.springbootalipay.domain.AlipayRefundDTO;
 import com.geekerit.springbootalipay.utils.DateUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  * @ClassName WapPayController
- * @Description
+ * @Description 支付宝手机网站支付
  * @Author Aaryn
  * @Date 2018/12/19 17:43
  * @Version 1.0
@@ -40,6 +40,7 @@ import java.util.Map;
 @RequestMapping(value = "/pay")
 @Api(value = "手机网站支付")
 public class WapPayController {
+
 
     public static final Logger logger = LoggerFactory.getLogger(WapPayController.class);
 
@@ -50,6 +51,7 @@ public class WapPayController {
     private AlipayClient alipayClient;
 
     @RequestMapping(method = RequestMethod.GET)
+    @ApiOperation(value = "生成支付请求")
     public void pay(HttpServletResponse httpResponse) throws Exception {
         //创建API对应的request
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();
@@ -83,7 +85,6 @@ public class WapPayController {
     @ResponseBody
     public String returnUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, String> map = new HashMap<>(16);
-
         Map<String, String[]> parameterMap = request.getParameterMap();
         Iterator<String> iterator = parameterMap.keySet().iterator();
         for (Iterator iter = iterator; iterator.hasNext(); ) {
@@ -147,6 +148,8 @@ public class WapPayController {
         refundModel.setTradeNo(alipayRefundDTO.getTradeNo());
         refundModel.setOutRequestNo(alipayRefundDTO.getOutRequestNo());
         refundModel.setRefundAmount(alipayRefundDTO.getRefundAmount());
+
+        refundRequest.setBizModel(refundModel);
 
         AlipayTradeRefundResponse refundResponse = alipayClient.execute(refundRequest);
 
