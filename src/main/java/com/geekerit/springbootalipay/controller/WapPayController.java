@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,15 +22,16 @@ import java.util.Map;
 
 /**
  * @ClassName WapPayController
- * @Description TODO
+ * @Description
  * @Author Aaryn
  * @Date 2018/12/19 17:43
  * @Version 1.0
  */
 @Controller
+@RequestMapping(value = "/pay")
 public class WapPayController {
 
-//    public static final Logger logger = LoggerFactory.getLogger(WapPayController.class);
+    public static final Logger logger = LoggerFactory.getLogger(WapPayController.class);
 
     @Autowired
     private AlipayProperties alipayProperties;
@@ -37,7 +39,7 @@ public class WapPayController {
     @Autowired
     private AlipayClient alipayClient;
 
-    @RequestMapping(value = "/pay")
+    @RequestMapping(method = RequestMethod.GET)
     public void pay(HttpServletResponse httpResponse) throws Exception{
         //创建API对应的request
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();
@@ -92,14 +94,15 @@ public class WapPayController {
 
         if (verifyResult){
             String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
-//            logger.info("商品订单号{}", outTradeNo);
+            logger.info("商品订单号{}", outTradeNo);
 
             //支付宝交易号
             String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
-//            logger.info("交易号{}",tradeNo);
+            logger.info("交易号{}",tradeNo);
             return "wayPaySuccess";
         }
 
         return "wayPayFail";
     }
+
 }

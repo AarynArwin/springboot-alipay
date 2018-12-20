@@ -34,7 +34,7 @@
         </encoder>
     </appender>
     <!-- project default level -->
-    <logger name="com.geekerit.springbootalipay" level="Error" />
+    <logger name="com.geekerit.springbootalipay" level="INFO" />
 
     <!-- 日志输出级别 -->
     <root level="INFO">
