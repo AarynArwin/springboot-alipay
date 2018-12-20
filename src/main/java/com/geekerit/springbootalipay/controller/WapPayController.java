@@ -41,7 +41,7 @@ public class WapPayController {
     private AlipayClient alipayClient;
 
     @RequestMapping(method = RequestMethod.GET)
-    public void pay(HttpServletResponse httpResponse) throws Exception{
+    public void pay(HttpServletResponse httpResponse) throws Exception {
         //创建API对应的request
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();
         //在公共参数中设置回跳和通知地址
@@ -56,7 +56,7 @@ public class WapPayController {
         model.setTotalAmount("10.00");
         //填充业务参数
         alipayRequest.setBizModel(model);
-        String form="";
+        String form = "";
         try {
             //调用SDK生成表单
             form = alipayClient.pageExecute(alipayRequest).getBody();
@@ -72,41 +72,42 @@ public class WapPayController {
 
     @RequestMapping(value = "/returnUrl")
     @ResponseBody
-    public String returnUrl(HttpServletRequest request, HttpServletResponse response) throws Exception{
-        Map<String,String> map = new HashMap<>(16);
+    public String returnUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, String> map = new HashMap<>(16);
 
         Map<String, String[]> parameterMap = request.getParameterMap();
         Iterator<String> iterator = parameterMap.keySet().iterator();
-        for (Iterator iter = iterator; iterator.hasNext();) {
-            String name = (String)iter.next();
+        for (Iterator iter = iterator; iterator.hasNext(); ) {
+            String name = (String) iter.next();
             String[] values = parameterMap.get(name);
 
             String valueStr = "";
 
             for (int i = 0; i < values.length; i++) {
-                valueStr = (i == values.length - 1) ? valueStr + values[i]: valueStr + values[i] + ",";
+                valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
             }
             valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
 
-            logger.info("该{}项下的获取的值为,{}",name,valueStr);
-            map.put(name,valueStr);
+            logger.info("该{}项下的获取的值为,{}", name, valueStr);
+            map.put(name, valueStr);
         }
         boolean verifyResult = AlipaySignature.rsaCheckV1(map,
                 alipayProperties.getPublicKey(),
                 alipayProperties.getCharset(),
                 alipayProperties.getSignType());
-        logger.info("验签结果{}",verifyResult);
-        if (verifyResult){
-            String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
+        logger.info("验签结果{}", verifyResult);
+        if (verifyResult) {
+            String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
             logger.info("商品订单号{}", outTradeNo);
 
             //支付宝交易号
-            String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
-            logger.info("交易号{}",tradeNo);
+            String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            logger.info("交易号{}", tradeNo);
             return "wayPaySuccess";
         }
 
         return "wayPayFail";
     }
+
 
 }
