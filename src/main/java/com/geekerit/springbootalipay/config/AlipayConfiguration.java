@@ -8,11 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @ClassName AlipayConfiguration
- * @Description 支付宝支付配置类
- * @Author Aaryn
- * @Date 2018/12/19 17:40
- * @Version 1.0
+ * @author Aaryn
  */
 @Configuration
 @EnableConfigurationProperties(AlipayProperties.class)

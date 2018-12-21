@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * 支付宝手机网站支付参数
- * @author GeekerIT
+ * @author Aaryn
  */
 @Data
 public class AlipayWapDTO {

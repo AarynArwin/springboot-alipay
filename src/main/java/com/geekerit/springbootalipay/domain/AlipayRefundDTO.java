@@ -5,11 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @ClassName AlipayRefundDTO
- * @Description TODO
- * @Author Aaryn
- * @Date 2018/12/20 17:56
- * @Version 1.0
+ * @author Aaryn
  */
 @Data
 @ApiModel(value = "订单退款参数")

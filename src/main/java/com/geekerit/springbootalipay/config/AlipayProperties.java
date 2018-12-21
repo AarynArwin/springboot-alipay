@@ -6,11 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
- * @ClassName AlipayProperties
- * @Description 支付宝对接参数
- * @Author Aaryn
- * @Date 2018/12/18 17:20
- * @Version 1.0
+ * @author Aaryn
  */
 @Component
 @PropertySource(value = "classpath:application-dev.yml")

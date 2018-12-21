@@ -14,6 +14,8 @@ import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.geekerit.springbootalipay.config.AlipayProperties;
 import com.geekerit.springbootalipay.constants.AlipayConstants;
 import com.geekerit.springbootalipay.domain.AlipayRefundDTO;
+import com.geekerit.springbootalipay.enums.AlipayEnum;
+import com.geekerit.springbootalipay.utils.AlipayUtil;
 import com.geekerit.springbootalipay.utils.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,11 +32,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * @ClassName WapPayController
- * @Description 支付宝手机网站支付
- * @Author Aaryn
- * @Date 2018/12/19 17:43
- * @Version 1.0
+ * @author Aaryn
  */
 @Controller
 @RequestMapping(value = "/pay")
@@ -49,6 +47,10 @@ public class WapPayController {
 
     @Autowired
     private AlipayClient alipayClient;
+
+    @Autowired
+    private AlipayUtil alipayUtil;
+
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "生成支付请求")
@@ -65,6 +67,8 @@ public class WapPayController {
         model.setOutTradeNo(DateUtil.nowTimeString());
         model.setTimeoutExpress("30m");
         model.setTotalAmount("10.00");
+        model.setProductCode(AlipayEnum.WAPPAY.getTitle());
+        logger.info("枚举类获取的信息为{}",AlipayEnum.WAPPAY.toString());
         //填充业务参数
         alipayRequest.setBizModel(model);
         String form = "";
@@ -84,35 +88,17 @@ public class WapPayController {
     @RequestMapping(value = "/returnUrl")
     @ResponseBody
     public String returnUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Map<String, String> map = new HashMap<>(16);
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        Iterator<String> iterator = parameterMap.keySet().iterator();
-        for (Iterator iter = iterator; iterator.hasNext(); ) {
-            String name = (String) iter.next();
-            String[] values = parameterMap.get(name);
-            String valueStr = "";
-            for (int i = 0; i < values.length; i++) {
-                valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
-            }
-            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
-
-            map.put(name, valueStr);
-        }
-        boolean verifyResult = AlipaySignature.rsaCheckV1(map,
-                alipayProperties.getPublicKey(),
-                alipayProperties.getCharset(),
-                alipayProperties.getSignType());
-        logger.info("验签结果{}", verifyResult);
+        boolean verifyResult = alipayUtil.checkSign(request);
+        // 验签通过业务处理
         if (verifyResult) {
             String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
             logger.info("商品订单号{}", outTradeNo);
-
             //支付宝交易号
             String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
             logger.info("交易号{}", tradeNo);
             return "wayPaySuccess";
         }
-
+        // 验签失败
         return "wayPayFail";
     }
 

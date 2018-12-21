@@ -4,11 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * @ClassName DateUtil
- * @Description TODO
- * @Author Aaryn
- * @Date 2018/12/19 17:43
- * @Version 1.0
+ * @author Aaryn
  */
 public class DateUtil {
 
