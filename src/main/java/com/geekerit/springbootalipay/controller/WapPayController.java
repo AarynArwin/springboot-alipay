@@ -5,7 +5,6 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
@@ -14,6 +13,7 @@ import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.geekerit.springbootalipay.config.AlipayProperties;
 import com.geekerit.springbootalipay.constants.AlipayConstants;
 import com.geekerit.springbootalipay.domain.AlipayRefundDTO;
+import com.geekerit.springbootalipay.domain.AlipayWapDTO;
 import com.geekerit.springbootalipay.enums.AlipayEnum;
 import com.geekerit.springbootalipay.utils.AlipayUtil;
 import com.geekerit.springbootalipay.utils.DateUtil;
@@ -27,9 +27,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * @author Aaryn
@@ -52,9 +49,9 @@ public class WapPayController {
     private AlipayUtil alipayUtil;
 
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/alipay",method = RequestMethod.POST)
     @ApiOperation(value = "生成支付请求")
-    public void pay(HttpServletResponse httpResponse) throws Exception {
+    public void pay(@RequestBody AlipayWapDTO alipayWapDTO, HttpServletResponse httpResponse) throws Exception {
         //创建API对应的request
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();
         //在公共参数中设置回跳和通知地址
@@ -62,11 +59,11 @@ public class WapPayController {
         alipayRequest.setNotifyUrl(alipayProperties.getNotifyUrl());
         // 设置业务参数
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
-        model.setBody("这一杯 谁不爱");
-        model.setSubject("瑞幸咖啡");
+        model.setBody(alipayWapDTO.getBody());
+        model.setSubject(alipayWapDTO.getSubject());
         model.setOutTradeNo(DateUtil.nowTimeString());
-        model.setTimeoutExpress("30m");
-        model.setTotalAmount("10.00");
+        model.setTimeoutExpress(alipayWapDTO.getTimeoutExpire());
+        model.setTotalAmount((String.valueOf(alipayWapDTO.getTotalAmount())));
         model.setProductCode(AlipayEnum.WAPPAY.getTitle());
         logger.info("枚举类获取的信息为{}",AlipayEnum.WAPPAY.toString());
         //填充业务参数
@@ -85,8 +82,9 @@ public class WapPayController {
         httpResponse.getWriter().close();
     }
 
-    @RequestMapping(value = "/returnUrl")
+    @RequestMapping(value = "/returnUrl",method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(value = "支付宝手机网站支付同步回调地址")
     public String returnUrl(HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean verifyResult = alipayUtil.checkSign(request);
         // 验签通过业务处理
@@ -104,6 +102,7 @@ public class WapPayController {
 
     @RequestMapping(value = "/info/{outTradeNo}",method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(value = "订单查询")
     public void getTradeInfo(@PathVariable(value = "outTradeNo") String outTradeNo) throws Exception{
         //创建API对应的request类
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
@@ -125,6 +124,7 @@ public class WapPayController {
 
     @RequestMapping(value = "/refund",method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(value = "订单退款")
     public String refundTrade(@RequestBody AlipayRefundDTO alipayRefundDTO) throws Exception{
         AlipayTradeRefundRequest refundRequest = new AlipayTradeRefundRequest();
 

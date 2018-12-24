@@ -2,6 +2,7 @@ package com.geekerit.springbootalipay.controller;
 
 import com.geekerit.springbootalipay.config.AlipayProperties;
 import com.geekerit.springbootalipay.utils.AlipayUtil;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.nio.charset.StandardCharsets;
  */
 @RestController
 @RequestMapping(value = "/pay/alipay")
+@Api(value = "支付宝异步回调")
 public class PayNotifyController {
 
     private static final Logger logger = LoggerFactory.getLogger(PayNotifyController.class);
