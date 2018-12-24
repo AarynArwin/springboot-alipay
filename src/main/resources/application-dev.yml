@@ -20,7 +20,7 @@ spring:
 #    timeout: 2000ms
   mvc:
     view:
-      prefix: /templates
+      prefix: classpath:/templates
       suffix: .html
 
 
@@ -38,3 +38,4 @@ pay:
     charset: UTF-8
     format: json
     signType: RSA2
+    payeeUserId: 2088102176309319

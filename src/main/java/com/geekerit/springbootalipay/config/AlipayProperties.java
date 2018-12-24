@@ -49,6 +49,10 @@ public class AlipayProperties {
      * 加密方式
      */
     private String signType;
+    /**
+     * 商户PID
+     */
+    private String payeeUserId;
 
 
 }

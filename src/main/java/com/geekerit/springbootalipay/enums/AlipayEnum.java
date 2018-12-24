@@ -3,11 +3,11 @@ package com.geekerit.springbootalipay.enums;
 /**
  * @author Aaryn
  */
-public enum  AlipayEnum {
+public enum AlipayEnum {
     /**
      * 手机网站支付
      */
-    WAPPAY("QUICK_WAP_WAY","手机网站支付");
+    WAPPAY("QUICK_WAP_WAY", "手机网站支付");
     /**
      * 支付宝平台的产品码
      */
@@ -17,7 +17,7 @@ public enum  AlipayEnum {
      */
     private String description;
 
-    private AlipayEnum(String title,String description){
+    AlipayEnum(String title, String description) {
         this.title = title;
         this.description = description;
     }

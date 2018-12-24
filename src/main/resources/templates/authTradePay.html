@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title></head>
+    <script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.inc.min.js"></script>
+<body>
+<button id="J_btn" class="btn btn-default">支付</button>
+</body>
+
+<script>
+    var btn = document.querySelector('#J_btn');
+    btn.addEventListener('click', function(){
+        ap.tradePay({
+            // orderStr: 'alipay_sdk=alipay-sdk-java-3.4.49.ALL&app_id=2016091900546447&biz_content=%7B%22amount%22%3A%220.02%22%2C%22extra_param%22%3A%22%7B%5C%22category%5C%22%3A%5C%22POSTPAY_CLOTHING%5C%22%2C%5C%22outStoreCode%5C%22%3A%5C%22charge001%5C%22%2C%5C%22outStoreAlias%5C%22%3A%5C%22%E4%BF%A1%E7%94%A8%E5%85%8D%E6%8A%BC%E6%B5%8B%E8%AF%95%5C%22%7D%22%2C%22order_title%22%3A%22%E6%94%AF%E4%BB%98%E5%AE%9D%E9%A2%84%E6%8E%88%E6%9D%83%22%2C%22out_order_no%22%3A%222018077735255938023%22%2C%22out_request_no%22%3A%2220181224142952%22%2C%22payee_logon_id%22%3A%22Payee_logon_id%22%2C%22payee_user_id%22%3A%222088102176309319%22%2C%22product_code%22%3A%22PRE_AUTH_ONLINE%22%7D&charset=UTF-8&format=json&method=alipay.fund.auth.order.app.freeze&notify_url=https%3A%2F%2Fwww.geekerit.com%2Fpay%2Falipay%2FnotifyUrl&sign=I0AuacppJscyr98HvIggL%2BfdrkUz5FZyNXtwaDyXiYC6Hmj9H7AJT9Tr%2BjVpvsiod71vrs%2Bn7eM84d0X87VAOjFDvjd26L0zgxduAGx7a%2B6TFeFO2FZ%2BShJyK0CvPaPFBuvbObKMj54YDNtqtRtqN%2BjPEFluW%2BbMz9Dfq7ygeuo3xuS1GFaS4sIpADbi3ksa0MKAP2yyEcVUG6Pb1zMlzHSlEVL4Dys%2FvuMo%2FO1SpnAlek05gbJsYFhfe%2BCMBDWNKODeVqs08zDK8x2%2Fy5%2Fxx0raiJfxS1ByluigJSV1zJuCm%2BFmaWnN8rdX%2Fi91fLFSnlwY175NfJ3Pfr2qfCIH5Q%3D%3D&sign_type=RSA2&timestamp=2018-12-24+14%3A29%3A52&version=1.0'
+            orderStr: "${orderStr}"
+        }, function(res){
+            ap.alert(res.resultCode);
+        });
+    });
+</script>
+</html>
