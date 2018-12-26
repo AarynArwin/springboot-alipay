@@ -20,8 +20,10 @@ spring:
 #    timeout: 2000ms
   mvc:
     view:
-      prefix: classpath:/templates
+      prefix: /templates
       suffix: .html
+  resources:
+    static-locations: classpath:/templates
 
 
 logging:

@@ -54,7 +54,7 @@ public class AlipayProperties {
      */
     private String payeeUserId;
 
-
+    private String pid;
 }
 
 

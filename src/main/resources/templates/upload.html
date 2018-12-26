@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Excel</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<a href="/export">导出</a> <br/>
+<form action="/import" enctype="multipart/form-data" method="post">
+    <input type="file" name="file"/> <input type="submit" value="导入Excel">
+</form>
+</body>
+</html>
