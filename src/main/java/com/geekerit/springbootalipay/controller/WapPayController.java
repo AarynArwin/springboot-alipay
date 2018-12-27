@@ -61,7 +61,7 @@ public class WapPayController {
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setBody(alipayWapDTO.getBody());
         model.setSubject(alipayWapDTO.getSubject());
-        model.setOutTradeNo(DateUtil.nowTimeString());
+        model.setOutTradeNo(DateUtil.formatNowTime());
         model.setTimeoutExpress(alipayWapDTO.getTimeoutExpire());
         model.setTotalAmount((String.valueOf(alipayWapDTO.getTotalAmount())));
         model.setProductCode(AlipayEnum.WAPPAY.getTitle());

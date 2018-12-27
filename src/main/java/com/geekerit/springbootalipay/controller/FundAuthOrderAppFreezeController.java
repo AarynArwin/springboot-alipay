@@ -38,9 +38,9 @@ public class FundAuthOrderAppFreezeController {
         AlipayFundAuthOrderAppFreezeModel authModel = new AlipayFundAuthOrderAppFreezeModel();
         authModel.setOrderTitle("支付宝预授权");
         //替换为实际订单号
-        authModel.setOutOrderNo(DateUtil.nowTimeString());
+        authModel.setOutOrderNo(DateUtil.formatNowTime());
         //替换为实际请求单号，保证每次请求都是唯一的
-        authModel.setOutRequestNo(DateUtil.nowTimeString());
+        authModel.setOutRequestNo(DateUtil.formatNowTime());
         //payee_user_id,Payee_logon_id不能同时为空
         authModel.setPayeeUserId(alipayProperties.getPayeeUserId());
         authModel.setPayeeLogonId("Payee_logon_id");

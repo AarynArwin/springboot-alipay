@@ -19,24 +19,36 @@ public class DateUtil {
     private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     /**
-     * 生成当前时间的年月日时分秒字符串
+     * 生成时间的字符串格式（）
      * @return 当前时间的年月日时分秒格式字符串
      */
-    public static String nowTimeString(){
+    public static String formatTime(LocalDateTime localDateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        LocalDateTime now = LocalDateTime.now();
-
-        String format = formatter.format(now);
+        String format = formatter.format(localDateTime);
         return format;
     }
 
-    public static final LocalDateTime MAX_TIME = LocalDateTime.MAX;
+    /**
+     * 获取当前时间的字符串格式
+     * @return 当前时间字符串表示
+     */
+    public static String formatNowTime(){
+        return formatTime(getNowWithTime());
+    }
 
     /**
-     * 获取当前系统时间
+     * 获取当前系统日期
+     * @return 当前系统日期
+     */
+    public static LocalDate getNowWithDate(){
+        return LocalDate.now();
+    }
+
+    /**
+     * 获取当前系统日期与时间
      * @return 默认时区的当前时间
      */
-    public static LocalDateTime getNow(){
+    public static LocalDateTime getNowWithTime(){
         return  LocalDateTime.now();
     }
 
@@ -59,8 +71,10 @@ public class DateUtil {
         return ZoneId.ofOffset("GMT", zoneOffset);
     }
 
+
+
     public static void main(String[] args) throws Exception {
-        LocalDateTime nowTimeWithZone = getNow();
+        LocalDateTime nowTimeWithZone = getNowWithTime();
         LocalDate localDate = nowTimeWithZone.toLocalDate();
         logger.info("当前日期为{}",localDate);
         LocalTime localTime = nowTimeWithZone.toLocalTime();
