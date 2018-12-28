@@ -11,6 +11,9 @@ import com.geekerit.springbootalipay.enums.SmsRedisExpireEnum;
 import com.geekerit.springbootalipay.enums.SmsTypeEnum;
 import com.geekerit.springbootalipay.enums.UserGiftMoneyEnum;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 短信发送工具类
  *
@@ -76,7 +79,7 @@ public class SmsUtil {
      * @return 发送短信标识（成功 success 失败 fail）
      * @throws ClientException 阿里云短信客户端异常
      */
-    public static String sendSms(SmsData smsData) throws ClientException {
+    private static String sendSms(SmsData smsData) throws ClientException {
         // 参数校验,校验通过时拿到用户的联系方式
         String phone = checkSmsParam(smsData);
         IAcsClient iAcsClient = sendMsgCommon();
@@ -114,7 +117,22 @@ public class SmsUtil {
         if (null == msg.getPhone() || msg.getPhone().isEmpty() || "".equals(msg.getPhone())) {
             throw new DisplayableException("手机号码不可为空!");
         }
+        if (!isMobileNum(msg.getPhone())){
+            throw new DisplayableException("用户手机号码不合法");
+        }
         return msg.getPhone();
+    }
+
+    /**
+     * 使用正则表达式校验手机号码
+     * @param telNum 需要校验的手机号码
+     * @return true即为通过检测
+     */
+    private static boolean isMobileNum(String telNum){
+        String regex = "^((13[0-9])|(14[5,7,9])|(15([0-3]|[5-9]))|(166)|(17[0,1,3,5,6,7,8])|(18[0-9])|(19[8|9]))\\d{8}$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(telNum);
+        return m.matches();
     }
 
     /**
@@ -122,7 +140,6 @@ public class SmsUtil {
      *
      * @param smsData 短信发送参数
      * @param request 发送短信请求
-     * @return 封装后的短信请求
      */
     private static void chooseService(SmsData smsData, SendSmsRequest request) {
         // 短信验证码
@@ -186,11 +203,10 @@ public class SmsUtil {
 
     /**
      * 用户登录验证码
-     *
-     * @param code  生成的验证码
-     * @param phone 用户手机号
-     * @return 发送短信标识(success 成功 fail 失败)
-     * @throws Exception 短信异常
+     * @param code          生成的验证码
+     * @param phone         用户手机号
+     * @return              发送短信标识(success 成功 fail 失败)
+     * @throws Exception    短信异常
      */
     public static String sendMsgForLogin(int code, String phone) throws Exception {
         SmsData smsData = new SmsData();
@@ -202,12 +218,12 @@ public class SmsUtil {
 
     /**
      * 发送悦心礼金后的短信提醒
-     *
-     * @param phone    用户手机号码
-     * @param giftType 用户礼金获取类型
-     * @throws Exception 短信发送异常
+     * @param phone         用户手机号码
+     * @param giftType      用户礼金获取类型
+     * @return              发送短信标识(success 成功 fail 失败)
+     * @throws Exception    短信发送异常
      */
-    public static void sendMsgOfGiftMoney(String phone, UserGiftMoneyEnum giftType) throws Exception {
+    public static String sendMsgOfGiftMoney(String phone, UserGiftMoneyEnum giftType) throws Exception {
         SmsData smsData = new SmsData();
         smsData.setPhone(phone);
         // 用户首次登陆发送五十元悦心礼金的短信通知
@@ -217,7 +233,7 @@ public class SmsUtil {
         } else {
             smsData.setSmsTypeEnum(SmsTypeEnum.GIFTMONEY_INVITE);
         }
-        sendSms(smsData);
+        return sendSms(smsData);
     }
 
     /**
@@ -227,9 +243,8 @@ public class SmsUtil {
 
     /**
      * 根据redis过期键提醒用户相关业务（短信通知）
-     *
-     * @param redisKey 已过期的redis的键
-     * @throws Exception 短信发送异常
+     * @param redisKey      已过期的redis的键
+     * @throws Exception    短信发送异常
      */
     public void chooseRedisExpire(String redisKey) throws Exception {
         String[] split = redisKey.split(":");
@@ -258,24 +273,42 @@ public class SmsUtil {
         // TODO  设置为查询出来的用户手机号码
         smsData.setPhone("");
 
-        // 判断redis的键属于哪种情形，用于区分不同的短信内容
+        // 判断redis的键属于哪种业务情形，用于区分不同的短信内容
         switch (smsEnum) {
-            // 用户押金通知（未成功支付开始计时10分钟，开始提示第一条。
+            /*
+             * 1.用户押金通知
+             *  用户生成支付会员费的订单时同时创建过期键监控，当键过期时检查用户的会员状态
+             *  注意这里不能查询订单的支付状态，支付订单可能过期或者重新创建支付订单，不能作为会员状态查询依据
+             *  键过期时间：10分钟
+             */
             case ORDER_MEMBER_PAY:
                 // TODO 当用户成为会员时不再发送短信
                 smsData.setSmsTypeEnum(SmsTypeEnum.REGIST_NOPAY);
                 break;
-            // 盒子支付通知
+            /*
+             * 2.盒子支付通知
+             *   用户评论完成创建支付订单时同时创建过期键监控，当键过期时检查盒子的支付状态
+             *   注意这里不能查询订单的支付状态，支付订单可能过期或者重新创建支付订单，不能作为盒子未支付查询依据
+             *   键过期时间：10分钟
+             */
             case ORDER_BOX_PAY:
                 String boxId = split[3];
                 // TODO 获取盒子主键后需要查询盒子的状态，如果盒子支付状态为已完成不再提醒用户
                 smsData.setSmsTypeEnum(SmsTypeEnum.BOX_ORDER_PAY);
                 break;
-            // 用户确认收货地址的通知
+            /*
+             * 3.提醒用户确认收货地址的通知
+             *      后台生成用户的下次盒子时同时创建过期键监控，当键过期时短信提醒用户确认默认收货地址
+             *      键过期时间，盒子发货前一周：（盒子的发出时间-7天）
+             */
             case USER_CONFIRM_ADDRESS:
                 smsData.setSmsTypeEnum(SmsTypeEnum.BOX_EXPRESS_BACK);
                 break;
-            // 通知用户退回盒子的通知
+            /*
+             * 4.通知用户退回盒子的通知
+             *      当用户的盒子状态变更为已签收时同时创建过期键提醒，当键过期时检查用户当前盒子的状态提醒用户退回盒子
+             *      键过期时间：7天
+             */
             case USER_BOX_BACK:
                 // 取出盒子的编号
                 String boxBack = split[3];
@@ -296,6 +329,20 @@ public class SmsUtil {
                 break;
         }
         sendSms(smsData);
+    }
+
+    /**
+     * 盒子的状态变更短信提醒
+     * @param phone         盒子所属用户联系方式
+     * @param smsTypeEnum   短信提醒类型
+     * @return              发送短信标识(success 成功 fail 失败)
+     * @throws Exception    短信发送异常
+     */
+    public static String sendMsgOfBox(String phone,SmsTypeEnum smsTypeEnum) throws Exception{
+        SmsData smsData = new SmsData();
+        smsData.setPhone(phone);
+        smsData.setSmsTypeEnum(smsTypeEnum);
+        return sendSms(smsData);
     }
 
 }

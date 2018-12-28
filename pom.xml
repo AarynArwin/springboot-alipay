@@ -123,13 +123,11 @@
         </dependency>
 
         <!--阿里云短信通知依赖-->
-        <!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-core -->
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>3.7.1</version>
+            <version>4.0.6</version> <!-- 注：如提示报错，先升级基础包版，无法解决可联系技术支持 -->
         </dependency>
-
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
