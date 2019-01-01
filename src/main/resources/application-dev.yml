@@ -2,28 +2,30 @@ server:
   port: 9988
 
 spring:
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://127.0.0.1:3306/upload?characterEncoding=utf-8
-#    username: root
-#    password: superman713
-#  redis:
-#    host: 127.0.0.1
-#    port: 6379
-#    password: fordearme2018
-#    jedis:
-#      pool:
-#        max-active: 8
-#        max-idle: 8
-#        min-idle: 0
-#        max-wait: -1ms
-#    timeout: 2000ms
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test01?characterEncoding=utf-8
+    username: root
+    password: superman713
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: fordearme2018
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+    timeout: 2000ms
   mvc:
     view:
       prefix: /templates
       suffix: .html
   resources:
     static-locations: classpath:/templates
+  jpa:
+    show-sql: true
 
 
 logging:
